@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:hackl_app/components.dart';
 
 import 'package:hackl_app/filterPage.dart';
 
@@ -16,11 +17,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pretraži Događaje',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black54,
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.white12,
           selectedLabelStyle: TextStyle(color: Colors.black),
           unselectedLabelStyle: TextStyle(color: Colors.black54),
         ),
@@ -73,11 +73,7 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Pretraži događaje',
-        ),
-      ),
+      backgroundColor: backgorundColor,
       body: _isLoading
           ? const Center(
         child: CircularProgressIndicator(),
@@ -214,6 +210,7 @@ class EventCard extends StatelessWidget {
 
 
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
