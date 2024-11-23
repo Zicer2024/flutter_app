@@ -66,6 +66,28 @@ flutter:
     - lib/images/orasar.png
     - lib/images/jimmy_carr.png
     - lib/images/skrtac.png
+    - lib/images/header/glazba/glazba1.jpg
+    - lib/images/header/glazba/glazba2.jpg
+    - lib/images/header/glazba/glazba3.jpg
+    - lib/images/header/film/film1.jpg
+    - lib/images/header/film/film2.jpg
+    - lib/images/header/film/film3.jpg
+    - lib/images/header/kazaliste/kazaliste1.jpg
+    - lib/images/header/kazaliste/kazaliste2.jpg
+    - lib/images/header/kazaliste/kazaliste3.jpg
+    - lib/images/header/knjiga/knjiga1.jpg
+    - lib/images/header/knjiga/knjiga2.jpg
+    - lib/images/header/knjiga/knjiga3.jpg
+    - lib/images/header/lik/lik1.jpg
+    - lib/images/header/lik/lik2.jpg
+    - lib/images/header/lik/lik3.jpg
+    - lib/images/header/muzej/muzej1.jpg
+    - lib/images/header/muzej/muzej2.jpg
+    - lib/images/header/muzej/muzej3.jpg
+    - lib/images/header/ples/ples1.jpg
+    - lib/images/header/ples/ples2.jpg
+    - lib/images/header/ples/ples3.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
