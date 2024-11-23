@@ -94,6 +94,43 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
                 ),
               ),
               const SizedBox(height: 20),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton.icon(
+                      icon: const Icon(
+                        Icons.filter_list,
+                        color: Colors.black,
+                      ), // Filter icon
+                      label: const Text(
+                        'Filtriraj događaje',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                FilterPage()), // Navigate to Filter Page
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(double.infinity,
+                                  50)), // Device width and 50px height
+                          shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Rounded corners
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
