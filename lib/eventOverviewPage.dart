@@ -5,7 +5,7 @@ class EventOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: const Text('Welcome to the new home page!'),
+        child: const Text('W to the new home page!'),
       ),
     );
   }
