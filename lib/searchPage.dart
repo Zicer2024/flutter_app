@@ -38,11 +38,6 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgorundColor,
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'Pretraži događaje',
-      //   ),
-      // ),
       body: SingleChildScrollView(
         // Ovo omogućava scrollanje ako sadržaj prelazi veličinu ekrana
         child: Padding(
@@ -73,7 +68,7 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        labelText: 'Od datuma',
+                        hintText: 'Od datuma',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -84,7 +79,7 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        labelText: 'Do datuma',
+                        hintText: 'Do datuma',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -160,21 +155,6 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Naslovnica',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Pretraži'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.trending_up), label: 'Moj put'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people), label: 'Prijatelji'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: 'Profil'),
-        ],
       ),
     );
   }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hackl_app/components.dart';
+import 'package:hackl_app/filterPage.dart';
+import 'package:hackl_app/searchPage.dart';
 import 'eventOverviewPage.dart';
 
 void main() {
@@ -32,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     EventOverviewPage(), // Your new home page
-    EventOverviewPage(), // Your new home page
-    EventOverviewPage(), // Your new home page
+    SearchEventsPage(), // Your new home page
+    FilterPage(), // Your new home page
     EventOverviewPage(), // Your new home page
     EventOverviewPage(), // Your new home page
   ];
@@ -47,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgorundColor,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

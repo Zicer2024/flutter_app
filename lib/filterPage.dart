@@ -1,51 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:hackl_app/components.dart';
+import 'package:hackl_app/searchPage.dart';
 
-class FilterPage extends StatelessWidget {
+class FilterPage extends StatefulWidget {
+  @override
+  _FilterPageState createState() => _FilterPageState();
+}
+
+class _FilterPageState extends State<FilterPage> {
+  double _currentValue = 40;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Filtriraj događaje'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
+      backgroundColor: backgorundColor,
       body: ListView(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         children: <Widget>[
+          const Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text('Filtriraj događaja',
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+          ),
           buildSectionTitle(context, 'Kategorije'),
-          buildCategoryChips(),
+          buildFilterChips(
+              ['Glazba', 'Film', 'Kazalište', 'Ples', 'Muzeji', 'Festivali']),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Tip događaja'),
-          buildTypeChips(),
+          buildFilterChips(['Koncert', 'Festival', 'Izložba', 'Predstava']),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Organizator'),
-          buildDropdown(
-              ['Hrvatsko narodno kazalište', 'Muzej suvremene umjetnosti']),
+          buildFilterChips([
+            'Hrvatsko narodno kazalište',
+            'Muzej suvremene umjetnosti',
+            'Lisinski'
+          ]),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Cijena ulaznice'),
           buildSlider(),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Pristupačnost'),
-          buildSwitch('Parking u blizini'),
-          buildSwitch('Invaliditet'),
-          buildSwitch('Ljubimci'),
+          buildFilterChips(['Parking u blizini', 'Invaliditet', 'Ljubimci']),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Dobne skupine'),
-          buildCheckbox('Za djecu'),
-          buildCheckbox('Za mlade'),
-          buildCheckbox('Za odrasle'),
+          buildFilterChips(['Za djecu', 'Za mlade', 'Za odrasle']),
+          const SizedBox(height: 20),
           buildSectionTitle(context, 'Sortiranje'),
-          buildDropdown(['Cijena', 'Popularnost', 'Datum']),
-          SizedBox(height: 20),
+          buildFilterChips(['Cijena', 'Popularnost', 'Datum']),
+          const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () =>
-                Navigator.pop(context), // Apply filters and close or navigate
-            child: Text('Primijeni filtre'),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SearchEventsPage()), // Navigate to Filter Page
+            ),
             style: ElevatedButton.styleFrom(
-              //primary: Colors.blue,
-              minimumSize: Size(double.infinity, 50), // Full width button
+              backgroundColor: blueColor,
+              minimumSize: const Size(double.infinity, 50), // Full width button
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10), // Rounded button
               ),
+            ), // Apply filters and close or navigate
+            child: const Text(
+              'Primijeni filtre',
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -54,94 +73,62 @@ class FilterPage extends StatelessWidget {
   }
 
   Widget buildSectionTitle(BuildContext context, String title) {
-    //return Padding(
-    //  padding: const EdgeInsets.symmetric(vertical: 10),
-    //  child: Text(title, style: Theme.of(context).textTheme.headline6),
-    //);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(title,
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+    );
+  }
 
-    return Container(
+  Widget buildFilterChips(List list) {
+    return SizedBox(
       height: 50,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: ['Glazba', 'Film', 'Kazalište', 'Ples', 'Muzeji', 'Festivali']
+        children: list
             .map((category) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: ChoiceChip(
-                    label: Text(category),
-                    selected: false,
-                    onSelected: (selected) {},
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ChoiceChip(
+                  backgroundColor: Color.fromARGB(255, 242, 242, 242),
+                  label: Text(category),
+                  selected: false,
+                  onSelected: (selected) {},
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(10.0), // Sets the border radius
+                    side: const BorderSide(
+                        color: Colors.black, width: 1), // Black, thin border
                   ),
-                ))
+                )))
             .toList(),
       ),
     );
   }
 
-  Widget buildCategoryChips() {
-    List<String> categories = ['Glazba', 'Film', 'Kazalište', 'Ples', 'Muzeji'];
-    return Wrap(
-      spacing: 8,
-      children: categories
-          .map((category) => Chip(
-                label: Text(category),
-                // onSelected: (_) {},
-              ))
-          .toList(),
-    );
-  }
-
-  Widget buildTypeChips() {
-    List<String> types = ['Koncert', 'Festival', 'Izložba', 'Predstava'];
-    return Wrap(
-      spacing: 8,
-      children: types
-          .map((type) => Chip(
-                label: Text(type),
-                // onSelected: (_) {},
-              ))
-          .toList(),
-    );
-  }
-
-  Widget buildDropdown(List<String> options) {
-    String selected = options.first;
-    return DropdownButton<String>(
-      isExpanded: true,
-      value: selected,
-      onChanged: (value) {},
-      items: options.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
   Widget buildSlider() {
-    return Slider(
-      value: 40,
-      min: 0,
-      max: 100,
-      divisions: 20,
-      label: '40€',
-      onChanged: (double value) {},
-    );
-  }
-
-  Widget buildSwitch(String label) {
-    return SwitchListTile(
-      title: Text(label),
-      value: true,
-      onChanged: (bool value) {},
-    );
-  }
-
-  Widget buildCheckbox(String label) {
-    return CheckboxListTile(
-      title: Text(label),
-      value: true,
-      onChanged: (_) => (),
-    );
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Slider(
+            value: _currentValue,
+            min: 0,
+            max: 100,
+            divisions: 20,
+            label: '${_currentValue.round()}€',
+            onChanged: (double value) {
+              setState(() {
+                _currentValue =
+                    value; // Update the state with the new slider value
+              });
+            },
+            activeColor: blueColor,
+            thumbColor: blueColor,
+            secondaryActiveColor: blueColor,
+          ),
+          Text(
+            'Cijena do ${_currentValue.round()}€',
+            style: const TextStyle(fontSize: 14),
+          ),
+        ]);
   }
 }
