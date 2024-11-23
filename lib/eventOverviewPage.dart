@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +15,10 @@ class MyApp extends StatelessWidget {
 }
 
 class EventOverviewPage extends StatelessWidget {
+  const EventOverviewPage({super.key});
+
+  final String address = "Hrvatsko narodno kazalište, Trg Republike Hrvatske 15";
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -109,23 +114,24 @@ class EventOverviewPage extends StatelessWidget {
                   fontWeight: FontWeight.bold),
                 ),Container(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0), // Add padding around the content
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InfoRow(
+                       InfoRow(
                         icon: Icons.calendar_today, // Calendar icon
                         text: "29.11.2024.",
+                        onTap: () => (),
                       ),
-                      SizedBox(height: 10), // Space between rows
+                      const SizedBox(height: 10), // Space between rows
                       InfoRow(
                         icon: Icons.access_time, // Clock icon
-                        text: "19:00",
+                        text: "19:00", onTap: () => (),
                       ),
-                      SizedBox(height: 10), // Space between rows
+                      const SizedBox(height: 10), // Space between rows
                       InfoRow(
                         icon: Icons.location_on, // Location pin icon
-                        text: "Hrvatsko narodno kazalište",
-                      ),
+                        text: "Hrvatsko narodno kazalište, Trg Republike Hrvatske 15",
+                        onTap: () => openGoogleMaps("Hrvatsko narodno kazalište, Trg Republike Hrvatske 15"),                      ),
                     ],
                   ),
                 ),
@@ -169,33 +175,45 @@ class EventOverviewPage extends StatelessWidget {
       ],
     );
   }
+
+  void openGoogleMaps(String query) async {
+    print("print");
+    final Uri googleMapsUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(query)}");
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
+    } else {
+      throw "Could not launch $googleMapsUrl";
+    }
+  }
 }
 
 class InfoRow extends StatelessWidget {
   final IconData icon;
   final String text;
+  final VoidCallback onTap;
 
-  const InfoRow({super.key, required this.icon, required this.text});
+  const InfoRow({required this.icon, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          size: 24.0,
-          color: Colors.grey[800], // Icon color
-        ),
-        SizedBox(width: 10), // Space between icon and text
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16.0,
-            color: Colors.black87, // Text color
+    return GestureDetector(
+      onTap: onTap, // Trigger the Google Maps search when tapped
+      child: Row(
+        children: [
+          Icon(icon, size: 24.0, color: Colors.grey[800]),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 8.0), // Add padding to make it tappable
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 16.0, color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
