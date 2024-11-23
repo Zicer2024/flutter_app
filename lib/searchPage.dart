@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackl_app/components.dart';
 
 import 'package:hackl_app/filterPage.dart';
 
@@ -12,11 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pretraži Događaje',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black54,
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.white12,
           selectedLabelStyle: TextStyle(color: Colors.black),
           unselectedLabelStyle: TextStyle(color: Colors.black54),
         ),
@@ -37,11 +37,12 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Pretraži događaje',
-        ),
-      ),
+      backgroundColor: backgorundColor,
+      // appBar: AppBar(
+      //   title: const Text(
+      //     'Pretraži događaje',
+      //   ),
+      // ),
       body: SingleChildScrollView(
         // Ovo omogućava scrollanje ako sadržaj prelazi veličinu ekrana
         child: Padding(
@@ -49,6 +50,12 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
               10.0), // Dodavanje margine oko cijelog sadržaja
           child: Column(
             children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text('Pretraži događaje',
+                    style:
+                        TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
+              ),
               TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
@@ -157,9 +164,9 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Naslovnica',
-              backgroundColor: Colors.white),
+            icon: Icon(Icons.home),
+            label: 'Naslovnica',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Pretraži'),
           BottomNavigationBarItem(
               icon: Icon(Icons.trending_up), label: 'Moj put'),
@@ -189,6 +196,7 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius:
             BorderRadius.circular(10.0), // Postavlja zaobljenost svih ivica
