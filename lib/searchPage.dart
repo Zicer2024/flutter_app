@@ -6,6 +6,10 @@ import 'dart:convert';
 import 'package:hackl_app/components.dart';
 
 import 'package:hackl_app/filterPage.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter/rendering.dart';
+
+import 'eventOverviewPage.dart'; // For specifying coordinates
 
 void main() {
   runApp(MyApp());
@@ -131,21 +135,23 @@ class _SearchEventsPageState extends State<SearchEventsPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _events.length,
-                itemBuilder: (context, index) {
-                  final event = _events[index];
-                  return EventCard(
-                    eventName: event.skraceniNaziv,
-                    eventTime: event.datumPocetka,
-                    venue: event.organizator,
-                    category: event.kategorija,
-                  );
-                },
-              ),
-            ],
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _events.length,
+            itemBuilder: (context, index) {
+              final event = _events[index];
+              return EventCard(
+                eventName: event.skraceniNaziv,
+                eventTime: event.datumPocetka,
+                venue: event.organizator,
+                category: event.kategorija,
+                description: event.opis, // Optional description
+                locationCoordinates: LatLng(45.80955, 15.969882), // Replace with actual coordinates
+              );
+            },
+          ),
+          ],
           ),
         ),
       ),
@@ -172,6 +178,8 @@ class EventCard extends StatelessWidget {
   final String eventTime;
   final String venue;
   final String? category;
+  final String? description;
+  final LatLng locationCoordinates;
 
   const EventCard({
     super.key,
@@ -179,6 +187,8 @@ class EventCard extends StatelessWidget {
     required this.eventTime,
     required this.venue,
     this.category,
+    this.description,
+    required this.locationCoordinates,
   });
 
   @override
@@ -245,8 +255,26 @@ class EventCard extends StatelessWidget {
       displayImage = ''; // Default image for unknown categories
     }
 
-
-    return Card(
+    return GestureDetector(
+        onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EventOverviewPage(
+            eventName: eventName,
+            eventCategory1: category ?? "Uncategorized",
+            eventCategory2: "Other", // Add secondary category if needed
+            eventAddress: venue,
+            eventDate: eventTime.split(' ')[0], // Extract date from time string
+            eventTime: eventTime.split(' ')[1], // Extract time
+            eventDescription: description ?? "No description available",
+            eventLocation: locationCoordinates,
+            displayImage: displayImage,
+          ),
+        ),
+      );
+    },
+    child: Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -274,7 +302,7 @@ class EventCard extends StatelessWidget {
             isThreeLine: true,
           ),
         ],
-      ),
+      ),    ),
     );
   }
 }

@@ -10,19 +10,45 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: EventOverviewPage(),
+        body: EventOverviewPage(
+          eventName: "Orašar",
+          eventCategory1: "Kazalište",
+          eventCategory2: "Balet",
+          eventAddress: "Hrvatsko narodno kazalište, Trg Republike Hrvatske 15",
+          eventDate: "29.11.2024.",
+          eventTime: "19:00",
+          eventDescription: "Baletnu bajku Orašar obožavaju djeca različite dobi...",
+          eventLocation: LatLng(45.80955, 15.969882),
+          displayImage: '',
+        ),
       ),
     );
   }
 }
 
 class EventOverviewPage extends StatelessWidget {
-  const EventOverviewPage({super.key});
+  final String eventName;
+  final String eventCategory1;
+  final String eventCategory2;
+  final String eventAddress;
+  final String eventDate;
+  final String eventTime;
+  final String eventDescription;
+  final LatLng eventLocation;
+  final String displayImage;
 
-  final String address = "Hrvatsko narodno kazalište, Trg Republike Hrvatske 15";
-  static const lCoordinates = {"latitude": 45.80955, "longitude": 15.969882};
-
-  static LatLng locationCoordinates = LatLng(lCoordinates['latitude']!, lCoordinates['longitude']!);
+  const EventOverviewPage({
+    super.key,
+    required this.eventName,
+    required this.eventCategory1,
+    required this.eventCategory2,
+    required this.eventAddress,
+    required this.eventDate,
+    required this.eventTime,
+    required this.eventDescription,
+    required this.eventLocation,
+    required this.displayImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +57,17 @@ class EventOverviewPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Image that extends to half of the page
+          // Image Banner with Overlay
           Stack(
             children: [
               Container(
                 height: screenHeight * 0.40,
                 width: double.infinity,
                 child: Image.asset(
-                  'lib/images/orasar.png', // Replace with your image path
+                  displayImage, // Replace with your image path
                   fit: BoxFit.cover,
                 ),
               ),
-              // Text on top of the image
               Positioned.fill(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -52,41 +77,13 @@ class EventOverviewPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.all(2.0),
-                            padding: const EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF3B1FA3),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Text(
-                              "Kazalište",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13.0,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(2.0),
-                            padding: const EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF3B1FA3),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Text(
-                              "Balet",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13.0,
-                              ),
-                            ),
-                          ),
+                          CategoryTag(category: eventCategory1),
+                          CategoryTag(category: eventCategory2),
                         ],
                       ),
-                      const Text(
-                        "Orašar",
-                        style: TextStyle(
+                      Text(
+                        eventName,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -98,7 +95,7 @@ class EventOverviewPage extends StatelessWidget {
               ),
             ],
           ),
-          // Content below the image
+          // Content Section
           Container(
             color: Colors.white,
             padding: const EdgeInsets.all(16.0),
@@ -115,20 +112,20 @@ class EventOverviewPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 InfoRow(
                   icon: Icons.calendar_today,
-                  text: "29.11.2024.",
+                  text: eventDate,
                   onTap: () {},
                 ),
                 const SizedBox(height: 10),
                 InfoRow(
                   icon: Icons.access_time,
-                  text: "19:00",
+                  text: eventTime,
                   onTap: () {},
                 ),
                 const SizedBox(height: 10),
                 InfoRow(
                   icon: Icons.location_on,
-                  text: address,
-                  onTap: () => openMap(locationCoordinates),
+                  text: eventAddress,
+                  onTap: () => openMap(eventLocation),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -139,9 +136,9 @@ class EventOverviewPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "Baletnu bajku Orašar obožavaju djeca različite dobi i ona je neizostavan dio svake adventske čarolije u svim dijelovima zemaljske kugle. Jedno od najljepših djela klasične baletne umjetnosti vodi svoje obožavatelje kroz božićni svijet raskoši, šarenila, veselja, mašte, prinčeva i vila te nezaobilaznih slatkiša, prateći pustolovine djevojčice Klare koja od svojeg ujaka na Badnjak dobiva neobičan dar, drobilicu za orahe u obliku drvenoga lutka.",
-                  style: TextStyle(
+                Text(
+                  eventDescription,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.normal,
                   ),
@@ -155,12 +152,11 @@ class EventOverviewPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // OpenStreetMap
                 SizedBox(
                   height: 200,
                   child: FlutterMap(
                     options: MapOptions(
-                      center: locationCoordinates,
+                      center: eventLocation,
                       zoom: 16.0,
                     ),
                     children: [
@@ -174,7 +170,7 @@ class EventOverviewPage extends StatelessWidget {
                           Marker(
                             width: 50.0,
                             height: 50.0,
-                            point: locationCoordinates,
+                            point: eventLocation,
                             builder: (ctx) => const Icon(
                               Icons.location_on,
                               color: Colors.red,
@@ -223,12 +219,39 @@ class EventOverviewPage extends StatelessWidget {
   }
 }
 
+class CategoryTag extends StatelessWidget {
+  final String category;
+
+  const CategoryTag({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF3B1FA3),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Text(
+        category,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 13.0,
+        ),
+      ),
+    );
+  }
+}
+
+
 class InfoRow extends StatelessWidget {
   final IconData icon;
   final String text;
   final VoidCallback onTap;
 
   const InfoRow({
+    super.key,
     required this.icon,
     required this.text,
     required this.onTap,
