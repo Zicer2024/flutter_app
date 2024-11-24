@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hackl_app/components.dart';
 import 'package:hackl_app/searchPage.dart';
 
 class FilterPage extends StatefulWidget {
@@ -10,27 +9,44 @@ class FilterPage extends StatefulWidget {
 class _FilterPageState extends State<FilterPage> {
   double _currentValue = 40;
 
+  // State for selected filters
+  final Map<String, List<String>> _selectedFilters = {
+    'Kategorije': [],
+    'Tip događaja': [],
+    'Organizator': [],
+    'Pristupačnost': [],
+    'Dobne skupine': [],
+    'Sortiranje': [],
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgorundColor,
+      backgroundColor: Colors.white,
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: <Widget>[
           const Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Text('Filtriraj događaja',
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
           ),
           buildSectionTitle(context, 'Kategorije'),
-          buildFilterChips(
-              ['Glazba', 'Film', 'Kazalište', 'Ples', 'Muzeji', 'Festivali']),
+          buildFilterChips('Kategorije', [
+            'Glazba',
+            'Film',
+            'Kazalište',
+            'Ples',
+            'Muzeji',
+            'Festivali'
+          ]),
           const SizedBox(height: 20),
           buildSectionTitle(context, 'Tip događaja'),
-          buildFilterChips(['Koncert', 'Festival', 'Izložba', 'Predstava']),
+          buildFilterChips('Tip događaja',
+              ['Koncert', 'Festival', 'Izložba', 'Predstava']),
           const SizedBox(height: 20),
           buildSectionTitle(context, 'Organizator'),
-          buildFilterChips([
+          buildFilterChips('Organizator', [
             'Hrvatsko narodno kazalište',
             'Muzej suvremene umjetnosti',
             'Lisinski'
@@ -40,28 +56,37 @@ class _FilterPageState extends State<FilterPage> {
           buildSlider(),
           const SizedBox(height: 20),
           buildSectionTitle(context, 'Pristupačnost'),
-          buildFilterChips(['Parking u blizini', 'Invaliditet', 'Ljubimci']),
+          buildFilterChips(
+              'Pristupačnost', ['Parking u blizini', 'Invaliditet', 'Ljubimci']),
           const SizedBox(height: 20),
           buildSectionTitle(context, 'Dobne skupine'),
-          buildFilterChips(['Za djecu', 'Za mlade', 'Za odrasle']),
+          buildFilterChips(
+              'Dobne skupine', ['Za djecu', 'Za mlade', 'Za odrasle']),
           const SizedBox(height: 20),
           buildSectionTitle(context, 'Sortiranje'),
-          buildFilterChips(['Cijena', 'Popularnost', 'Datum']),
+          buildFilterChips('Sortiranje', ['Cijena', 'Popularnost', 'Datum']),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      SearchEventsPage()), // Navigate to Filter Page
-            ),
+            onPressed: () {
+              final filterJson = {
+                ..._selectedFilters,
+                'Cijena ulaznice': _currentValue.round(),
+              };
+              debugPrint(filterJson.toString());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SearchEventsPage()), // Navigate to Filter Page
+              );
+            },
             style: ElevatedButton.styleFrom(
-              backgroundColor: blueColor,
-              minimumSize: const Size(double.infinity, 50), // Full width button
+              backgroundColor:  const Color(0xFF3B1FA3),
+              minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10), // Rounded button
+                borderRadius: BorderRadius.circular(10),
               ),
-            ), // Apply filters and close or navigate
+            ),
             child: const Text(
               'Primijeni filtre',
               style: TextStyle(color: Colors.white),
@@ -80,26 +105,35 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
-  Widget buildFilterChips(List list) {
+  Widget buildFilterChips(String filterKey, List<String> options) {
     return SizedBox(
       height: 50,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: list
-            .map((category) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ChoiceChip(
-                  backgroundColor: Color.fromARGB(255, 242, 242, 242),
-                  label: Text(category),
-                  selected: false,
-                  onSelected: (selected) {},
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Sets the border radius
-                    side: const BorderSide(
-                        color: Colors.black, width: 1), // Black, thin border
-                  ),
-                )))
+        children: options
+            .map((option) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: ChoiceChip(
+            backgroundColor: Colors.white,
+            selectedColor:  const Color(0xFF3B1FA3).withOpacity(0.8),
+            label: Text(option),
+            selected: _selectedFilters[filterKey]?.contains(option) ??
+                false,
+            onSelected: (selected) {
+              setState(() {
+                if (selected) {
+                  _selectedFilters[filterKey]?.add(option);
+                } else {
+                  _selectedFilters[filterKey]?.remove(option);
+                }
+              });
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: const BorderSide(color: Colors.black, width: 1),
+            ),
+          ),
+        ))
             .toList(),
       ),
     );
@@ -117,13 +151,11 @@ class _FilterPageState extends State<FilterPage> {
             label: '${_currentValue.round()}€',
             onChanged: (double value) {
               setState(() {
-                _currentValue =
-                    value; // Update the state with the new slider value
+                _currentValue = value;
               });
             },
-            activeColor: blueColor,
-            thumbColor: blueColor,
-            secondaryActiveColor: blueColor,
+            activeColor: Colors.blue,
+            thumbColor: Colors.blue,
           ),
           Text(
             'Cijena do ${_currentValue.round()}€',
